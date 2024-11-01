@@ -13,13 +13,13 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           repository: zed-industries/zed
           ref: main
 
       - name: Install rust nightly
-        uses: actions-rs/toolchain@v2
+        uses: actions-rs/toolchain@v1  # Change to v1
         with:
           toolchain: nightly
           override: true
@@ -29,7 +29,7 @@ jobs:
         uses: Swatinem/rust-cache@v2.7.3
 
       - name: Build release
-        uses: actions-rs/cargo@v2
+        uses: actions-rs/cargo@v1  # Change to v1
         with:
           command: build
           args: --release
