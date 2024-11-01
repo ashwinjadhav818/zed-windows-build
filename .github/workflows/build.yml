@@ -9,25 +9,23 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Enable Long Path Support
-        run: |
-          REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\FileSystem" /v LongPathsEnabled /t REG_DWORD /d 1 /f
-
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
           repository: zed-industries/zed
           ref: main
 
-      - name: Install rust nightly
+      - name: Install Rust nightly
         uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
           override: true
-          target: wasm32-wasi
+
+      - name: Install Windows target
+        run: rustup target add x86_64-pc-windows-gnu
 
       - name: Rust Cache
         uses: Swatinem/rust-cache@v2.7.3
@@ -36,15 +34,15 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release
+          args: --release --target=x86_64-pc-windows-gnu
         env:
-          CARGO_TARGET_DIR: C:\cargo-target  # Set to a shorter path
+          CARGO_TARGET_DIR: ${{ github.workspace }}/cargo-target  # Set to a shorter path
 
       - name: Archive build
         uses: actions/upload-artifact@v4
         with:
           name: zed-release
-          path: target/release/zed.exe
+          path: target/x86_64-pc-windows-gnu/release/zed.exe
 
   release:
     needs: build
