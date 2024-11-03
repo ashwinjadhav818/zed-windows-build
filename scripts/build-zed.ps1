@@ -18,6 +18,10 @@ function Get-Architecture {
 $arch = Get-Architecture
 Write-Host "Building for architecture: $arch"
 
+# Check/Install WASM toolchain
+Write-Host "Ensuring WASM toolchain is installed..."
+rustup target add wasm32-wasi
+
 # Update Rust
 rustup update
 

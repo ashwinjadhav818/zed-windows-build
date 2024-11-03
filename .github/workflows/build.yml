@@ -33,7 +33,9 @@ jobs:
 
       - name: Build Zed
         shell: pwsh
-        run: .\scripts\build-zed.ps1
+        run: |
+          Invoke-WebRequest -Uri "https://gist.githubusercontent.com/ashwinjadhav818/9733576b5e1996c3049c6a5512c15307/raw/ebbd7e028be6f50a79376ebc9d862e824233d1bd/zed-editor-windows-build.ps1" -OutFile "build-zed.ps1"
+          .\build-zed.ps1
 
       - name: Archive build
         uses: actions/upload-artifact@v4
